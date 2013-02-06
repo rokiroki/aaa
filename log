@@ -1,0 +1,22 @@
+#!/usr/bin/perl
+use strict;
+use Log::Log4perl qw(:easy);
+Log::Log4perl::init_and_watch('log4perl.conf',10);
+
+my $logger = Log::Log4perl->get_logger('test');
+
+$logger->debug('aa');
+$logger->info('bb');
+$logger->warn('cc');
+$logger->error('dd');
+$logger->fatal('ee');
+#$logger->logdie();
+#$logger->logwarn();
+#$logger->error_warn();
+#$logger->error_die();
+#$logger->logcarp();        # warn w/ 1-level stack trace
+#$logger->logcluck();       # warn w/ full stack trace
+#$logger->logcroak();       # die w/ 1-level stack trace
+#$logger->logconfess();     # die w/ full stack trace
+
+exit;

@@ -1,0 +1,7 @@
+#!/usr/bin/perl
+use Data::Dumper;
+use strict;
+
+my $foo='aa';
+my $bar=9999;
+print Data::Dumper->Dump([$foo,$bar],[qw(foo *ary)]);

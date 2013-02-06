@@ -1,0 +1,61 @@
+    #use Acme::PerlTidy;
+
+    use POE;
+    use File::Xcopy qw(xcopy find_files);
+
+    POE::Session->create(
+        inline_states => {
+            _start     => \&Start,
+            _FindFiles => \&_FindFiles,
+            _Backup    => \&_Backup,
+            _Exit      => \&_Exit,
+        },
+    );
+    POE::Kernel->run;
+
+    sub Start {
+        my ( $kernel, $heap ) = @_[ KERNEL, HEAP ];
+        $heap->{from_dir} = '/home/roki/useful/script/test';
+        $heap->{to_dir}   = '/home/roki/database';
+        $heap->{regex}    = '.*';
+
+        print '<select a number:>', "\n";
+        my $prompt = 'which will you chose:';
+        my @array  = qw(FindFiles Backup Exit);
+        return '' unless @array;
+        print "  $_:$array[$_]\n" for ( 0 .. $#array );
+        print $prompt;
+        my $n = <>;
+        if ( $n =~ /^\d+$/ and defined $array[$n] ) {
+            print "You chose:$array[$n]\n";
+            my $block = '_' . $array[$n];
+            $kernel->yield($block);
+        }
+    }
+
+    sub _Backup {
+        my ( $kernel, $heap ) = @_[ KERNEL, HEAP ];
+
+        #如不存在目标备份文件夹(copy_to_dir)则新建同名文件夹
+        mkdir( $heap->{to_dir} ) if ( !-e $heap->{to_dir} );
+        my $fx = File::Xcopy->new;
+        my %p = ( s => 1 );
+        $fx->xcp( $heap->{from_dir}, $heap->{to_dir}, $heap->{regex}, \%p );
+        $kernel->yield('_start');
+    }
+
+    #列出文件清单
+    sub _FindFiles {
+        my ( $kernel, $heap ) = @_[ KERNEL, HEAP ];
+        my $fx = File::Xcopy->new;
+        my $ar = $fx->find_files( $heap->{from_dir}, $heap->{regex} );
+        open my $fh, ">目录.txt";
+        for my $ar_file ( @{$ar} ) {
+            print "\t$ar_file->{path}\n";
+            print $fh "$ar_file->{path}\n";
+        }
+        close $fh;
+        $kernel->yield('_start');
+    }
+
+    sub _Exit { exit 0 }

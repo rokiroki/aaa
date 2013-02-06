@@ -1,0 +1,19 @@
+client:
+   $(document).ready(function() {  
+        var tar = $('#targetR').val();
+        $.post("bug.jsp",{  
+               targetRelease : tar 
+           },function (data){
+                $('#bugnumber').text(data);
+            });
+   });   
+
+server:
+<%@ page language="java" import="java.sql.*,java.io.*,database.*,java.text.*,java.util.*"%>
+<%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>  
+<%  
+request.setCharacterEncoding("UTF-8");  
+String targetRelease=request.getParameter("targetRelease");  
+int number = Bug.getNumberFromJIRA(targetRelease);
+%>  
+<%=number%>

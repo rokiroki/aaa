@@ -1,0 +1,19 @@
+#!/usr/bin/perl
+
+use Archive::Tar;
+zipFolder('/extra/hfx863/backup/AST');
+
+sub zipFolder
+{
+    my $folder = shift @_;
+    chdir $folder;
+    my @files = <*.sql>;
+    for (@files)
+    {
+        my $target = "$_.tgz";
+        my $tar = Archive::Tar->new();
+        $tar->add_files($_);
+        $tar->write($target, COMPRESS_GZIP);
+        unlink $_;
+    }
+}

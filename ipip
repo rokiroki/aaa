@@ -1,0 +1,43 @@
+    #!/usr/bin/perl
+
+
+    ################################
+    # this script is using to scan the lan 's ip.
+    # this can show how much ip is in using.
+    # auth by redpig315,^_^
+    ###############################
+
+
+    use strict;
+    use warnings;
+
+    open(Fh,">iptable");
+    print Fh "iplist\n";
+    close(Fh);
+    open(Fh,">>iptable");
+
+    my $iphead="192.168.7.";
+    my $i=1;
+    my $count=0;
+    while($i++<255){
+    my $ip =$iphead.$i;
+    my $node=$ip;
+    my $state=!system("ping -c        1 -w 1 -q $node 1>/dev/null 2>&1");
+    if(!$state){
+       print "$node is  offline\n";
+
+    }else{
+         $count++;
+       print "$node is online\n";
+       print Fh "$node\n";
+    }
+
+    $ip=$iphead;
+    }
+    close(Fh);
+
+    print "total $count 's ip online\n";
+
+    my $offip=255-$count;
+
+    print "total $offip 's ip offline\n";

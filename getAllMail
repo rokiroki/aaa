@@ -1,0 +1,19 @@
+#!/usr/bin/perl
+use strict;
+use Net::POP3;
+use Data::Dumper;
+use MIME::Base64;
+my $user = "roki333\@qq.com";
+my $pass = shift or die "Usage : $0 passwd\n";
+my $host = "pop.qq.com";#pop3 address
+
+my $p = Net::POP3->new($host) or die "Can't connect $host!\n";
+$p->login($user, $pass) or die "user or passwd error!\n";
+my $title = $p->list or die "No mail for $user\n";
+foreach my $h(keys %$title)
+{
+my $msg = $p->get($h);
+print @$msg;      #print decode_base64($_);
+}
+$p->quit;
+exit 0;

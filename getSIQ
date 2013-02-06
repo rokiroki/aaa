@@ -1,0 +1,179 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+use DBI;
+use Date::Calc qw(:all);
+#database connection
+my $dbh = DBI -> connect('dbi:mysql:BSD:localhost','xxx','xx2010');
+my $dbtf = DBI -> connect('dbi:mysql:resource:xxx','xxx','');
+if (!defined $dbh)
+{
+    die "Can't connect database:$dbh->errstr\n";
+}
+if (!defined $dbtf)
+{
+    die "Can't connect database:$dbtf->errstr\n";
+}
+##get current month
+#orgid:92--Swe(rootorg) 126--Stp 159--EMEA(defaultorg)
+my ($sec, $min, $hour, $day, $mon, $year,) = localtime();
+$year = $year+1900;
+$mon = $mon+1;
+$mon = sprintf("%02d",$mon);
+$day = "01";
+#get date for search
+my $currentMonth = "$year-$mon-$day";
+my $startDayInWeek = Day_of_Week($year,$mon,$day);
+my $days = Days_in_Month($year,$mon);
+my $lastMonthDay = "$year-$mon-$days";
+my $lastDayInWeek = Day_of_Week($year,$mon,$days);
+my $lastWeekStart = "$year-$mon-".($days - 5);
+
+my @fullWeek;   #store full sheet
+my %partilyWeek;   #store partily sheet
+my $statement = "SELECT sh.id From ts_weeks as we join ts_sheets as sh 
+                                    on sh.ts_week_id = we.id join users 
+                                    on users.userid =sh.coreid 
+                                    where we.startdate between \'$currentMonth\' and \'$lastMonthDay\'  
+                                    and (users.defaultorg = 159 or users.defaultorg = 126 or users.rootorg = 92) 
+                                    order by we.startdate";
+my $sth = $dbtf -> prepare($statement) or die "Can’t prepare $statement: $dbtf->errstr＼n"; 
+$sth -> execute or die "can’t execute the query: $sth->errstr"; 
+while (my @row = $sth -> fetchrow_array) 
+{
+    push @fullWeek,@row;
+} 
+if($lastDayInWeek != 6)
+{
+    my $lastId = pop @fullWeek;
+    my @lastWeek;
+    @lastWeek = (0..$lastDayInWeek);
+    @lastWeek = (0) if  $lastDayInWeek == 7;
+    $partilyWeek{$lastId} = [@lastWeek];
+}
+if($startDayInWeek != 7)
+{
+    my @firstWeek = ($startDayInWeek..6);
+    $statement = "SELECT id From ts_weeks where startdate < \'$currentMonth\'  
+                                order by startdate desc limit 1";
+    $sth -> execute or die "can’t execute the query: $sth->errstr";
+    my @res; 
+    while (my @row = $sth -> fetchrow_array) 
+    {
+        push @res,@row; 
+    }     
+    my $firstId = shift @res;
+    $#res = -1;
+    $statement = "SELECT sh.id From ts_sheets as sh join join users on users.userid =sh.coreid 
+                                where sh.ts_week_id = $firstId  and 
+                                (users.defaultorg = 159 or users.defaultorg = 126 or users.rootorg = 92)";
+    $sth -> execute or die "can’t execute the query: $sth->errstr";
+    while (my @row = $sth -> fetchrow_array) 
+    {
+        push @res,@row; 
+    }     
+    while(my $firstSheetId = shift @res)
+    {
+        $partilyWeek{$firstSheetId} = [@firstWeek];
+    }
+}
+print "full sheet:@fullWeek \n";
+for (keys %partilyWeek)
+{
+    my $t = $partilyWeek{$_};
+    for my $tt(@$t)
+    {
+        print "PartilyWeek: sheet$_  $tt\n";
+    }
+}
+
+##get SW creation hours
+my $swActivityId = 36;
+my $swCreation;
+$statement = "";
+$sth -> execute or die "can’t execute the query: $sth->errstr";
+if (my @row = $sth -> fetchrow_array) 
+{
+    $swCreation = shift @row; 
+}
+else
+{
+    $swCreation = 0;    
+}
+##get bug work
+my $bugWorkId = 37;
+my $bugWork;
+$statement = "select count()";
+$sth -> execute or die "can’t execute the query: $sth->errstr";
+if (my @row = $sth -> fetchrow_array) 
+{
+    $bugWork = shift @row; 
+}
+else
+{
+    $bugWork = 0;    
+}
+
+##calculation
+my $sw = sprintf("%.0f", $swCreation * 100 / ($swCreation + $bugWork));
+my $bug = sprintf("%.0f",$bugWork * 100 / ($swCreation + $bugWork));
+print "$sw........$bug\n";
+my $ratio = sprintf("%.2f",$swCreation / $bugWork);
+my $querytmp;
+if($mon > 5)
+{
+    my $start = sprintf("%02d",$mon-5);
+    my $end = $mon - 1;
+    $querytmp = " MonthStartDate = \'$year-$start-01\'";
+    $start++;
+    for($start..$end)
+    {
+        my $tmp = sprintf("%02d",$_);
+        $querytmp .= " or MonthStartDate = \'$year-$tmp-01\'";
+    }
+}else{
+    $querytmp = " MonthStartDate = \'$year-01-01\'";
+    my $start = 2;
+    my $end = $mon - 1;
+    for($start..$end)
+    {
+        my $tmp = sprintf("%02d",$_);
+        $querytmp .= " or MonthStartDate = \'$year-$tmp-01\'";
+    }
+    my $yeartmp = $year - 1;
+    $start = $mon + 7;
+    for($start..12)
+    {
+        my $tmp = sprintf("%02d",$_);
+        $querytmp .= " or MonthStartDate = \'$year-$tmp-01\'";
+    }    
+}
+print $querytmp;
+$statement = "SELECT sum(SWCreation),sum(BugWork) from KPISIQ where $querytmp";
+$sth = $dbh -> prepare($statement) or die "Can’t prepare $statement: $dbh->errstr＼n"; 
+$sth -> execute or die "can’t execute the query: $sth->errstr";
+my @res;
+$#res = -1; 
+if (my @row = $sth -> fetchrow_array) 
+{
+    push @res,@row;
+} 
+my $SWtotal = (shift @res) + $swCreation;
+my $bugWorkTotal = (shift @res) + $bugWork;
+my $ratioRolling = sprintf("%.2f",$SWtotal / $bugWorkTotal);
+print "$ratio,$ratioRolling";
+my $goal = 2.00;
+##write into database
+#$statement = "delete from KPISIQ where MonthStartDate = \'$currentMonth\'";
+#$sth = $dbh -> prepare($statement) or die "Can’t prepare $statement: $dbh->errstr＼n"; 
+#$sth -> execute or die "can’t execute the query: $sth->errstr";
+#$statement = "insert into KPISIQ(MonthStartDate,Ratio,RatioRollingAverage,
+ #                           Goal,SWCreation,BugWork,SW,Bug) values
+#                            (\'$currentMonth\',$ratio,$ratioRolling,$goal,$swCreation,
+ #                           $bugWork,$sw,$bug)";
+#$sth = $dbh -> prepare($statement) or die "Can’t prepare $statement: $dbh->errstr＼n"; 
+#$sth -> execute or die "can’t execute the query: $sth->errstr";
+exit;
+
+
+

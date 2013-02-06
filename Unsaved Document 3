@@ -1,0 +1,37 @@
+(cpan,cpanp,cpanm)
+http://www.perlcn.com/perlbc/perljj/748.html
+Smart::Comments,Data::Dumper
+http://www.perlcn.com/category/perlbc
+http://www.php-oa.com/2010/05/05/perl-cpanminus-cpan.html
+http://www.php-oa.com/2010/02/04/cpanplus-per.html
+http://bbs.chinaunix.net/tree/index_485_1/
+
+
+合格 Perl 程序员
+    能很好的使用引用,解引用,理解引用
+    会使用一些高级的函数
+    了解不太常用的特别符号
+    会使用常用的模块,Data::Dumper,Smart::Comments,Getopt,lwp系列,file系列,TT模板之类
+    会使用 sort,map,grep
+    会写比较强大的单行程序
+    使用过 30 个以上的模块
+    最少写过 500 行以上的单个 Perl 程序
+
+高手
+
+    比较深入的了解面向对象
+    能写自己的模块
+    会使用 POE, AnyEvent,Moose,Catalyst,Gtk2,Mogilefs,Gearman,Perlbal 之类的高级模块和功能
+    最好能分析上面高级模块中一二个,最少比较深入的了解其中一样.
+    常常重构自己的程序(看到自己以前的程序就骂,这 tm 太烂了)
+    能读明白别人的模块 ,和修改别人的模块
+    会基本的 Perl 打包,和制作 CPAN 的模块
+    Inline::C和xs 的了解和会使用
+    坚持玩 Perl 三年,天才除外
+
+大师
+
+    设计自己的系统,架构,框架,以及有自己思想的东西,如前面的 poe 之类.
+    C 高手
+    对 Perl 极为热情(不热情也到不了这步)…
+

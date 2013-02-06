@@ -1,0 +1,41 @@
+#!/usr/bin/perl
+use Net::SCP::Expect;
+use strict;
+use Archive::Tar;
+my $scpObj = Net::SCP::Expect->new(host=>'',user=>'',password=>'');
+# local ’file’ copied to ’host’ at ’/some/dir’"
+my ($sec, $min, $hour, $day, $mon, $year,) = localtime();
+$year += 1900;
+$mon += 1;
+$mon = sprintf "%2d",$mon;
+$day = sprintf "%2d",$day;
+my $key = 20130131;##$year.$mon.$day;
+
+opendir AST,"/home/git/backup/AST";
+for(readdir AST)
+{
+    next if $_ =~ /^\./;
+    next if !$_ =~ /$key/;
+    $scpObj->scp('/home/git/backup/AST/'.$_,'/extra/hfx863/backup/ASTTest');
+}
+opendir ASTTest,"/home/git/backup/ASTTest";
+for(readdir ASTTest)
+{
+    next if $_ =~ /^\./;
+    next if !$_ =~ /$key/;
+    $scpObj->scp('/home/git/backup/ASTTest/'.$_,'/extra/hfx863/backup/ASTTest');
+}
+opendir BES,"/home/git/backup/BES";
+for(readdir BES)
+{
+    next if $_ =~ /^\./;
+    next if !$_ =~ /$key/;
+    $scpObj->scp('/home/git/backup/BES/'.$_,'/extra/hfx863/backup/BES');
+}
+opendir BSD,"/home/git/backup/BSD";
+for(readdir BSD)
+{
+    next if $_ =~ /^\./;
+    next if !$_ =~ /$key/;
+    $scpObj->scp('/home/git/backup/BSD/'.$_,'/extra/hfx863/backup/BSD');
+}

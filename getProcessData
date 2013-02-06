@@ -1,0 +1,20 @@
+#!/usr/bin/perl
+use strict;
+use Proc::ProcessTable;
+my $pt = new Proc::ProcessTable;
+print "pid => ";
+print "time => ";
+print "cpu => ";
+print "mem => ";
+print "virtual memory => ";
+print "cmndline => \n";
+foreach(reverse sort @{$pt->table})
+{
+	print $_->pid, " => ";
+	print $_->time, " => ";
+	print $_->pctcpu, " => ";
+	print $_->pctmem, " => ";
+	print $_->size, " => ";
+	print $_->cmndline, "\n";
+}
+exit 0;
