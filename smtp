@@ -1,0 +1,17 @@
+#!/usr/bin/perl
+
+use strict;
+use Net::SMTP;
+
+my $smtp = Net::SMTP->new('smtp.sohu.com', Timeout => 10, Debug => 0)
+   or die "new error/n";
+#$smtp->auth("user", "passwd") or die "auth error/n";
+$smtp->mail('some');
+$smtp->to('some@some.com');
+$smtp->data("chinaunix,哈楼你好啊!/n[b]:[/b])");
+$smtp->quit;
+
+exit 0; 
+#有的SMPT Server需要Authentication，那么就使用auth()方法进行验证。
+#Debug模式打开，可以看到详细的SMTP命令代码。也有助于我们排错。
+

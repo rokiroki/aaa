@@ -1,0 +1,23 @@
+
+#!/usr/bin/perl
+#一个简单的，只能处理单一请求的Web服务器模型。
+#send_file_response()方法能把Client请求的文件传送过去。
+use HTTP:: Daemon;
+
+$| = 1;
+my $wwwroot = "/home/doc/";
+my $d = HTTP:: Daemon->new || die;
+print "Perl Web-Server is running at: ", $d->url, " .../n";
+
+while (my $c = $d->accept)
+{   
+   print $c "Welcome to Perl Web-Server<br>";
+
+    if(my $r = $c->get_request)
+   {      
+      print "Received : ", $r->url->path, "/n";
+      $c->send_file_response($wwwroot.$r->url->path);
+    }
+
+    $c->close;
+} 

@@ -1,0 +1,32 @@
+#!/usr/bin/perl
+use strict;
+use HTTPD::Log::Filter;
+
+my $filter = HTTPD::Log::Filter->new(format => "CLF",
+                           capture => ['request', 'host']);
+
+foreach(`cat access_log`)
+{
+   chomp;
+   unless( $filter->filter($_) )
+   {
+      print "[$_]/n";
+      next;
+   }
+   print $filter->request, "/n";
+}
+exit 0; 
+#如果我们工作中经常需要分析Apache日志，这个模块可以提供一些方便。
+#创建对象实例以后，用filter方法来过滤，没有正确匹配的行将返回false,
+#然后用相应的方法print出我们需要的数据。(host,request,date...等等方法，
+#由capture选项以参数引入)
+#可以用re方法打印出作者所使用的匹配模式：
+
+
+#use HTTPD::Log::Filter;
+#print HTTPD::Log::Filter->new(format=>"CLF",capture=>['request'])->re;
+
+
+
+#详见perldoc HTTPD::Log::Filter. enjoy it
+

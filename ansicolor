@@ -1,0 +1,22 @@
+#!/usr/bin/perl
+use strict;
+use Term::ANSIColor qw(:constants);
+
+$Term::ANSIColor::AUTORESET = 1;
+
+$| = 1;
+my $str = "Welcome to chinaunix ^_^!/n";
+
+for my $i(0..length($str)-1)
+{
+   print BOLD RED substr($str, $i, 1);
+   select(undef, undef, undef, 0.3);
+}
+exit 0; 
+#查看ANSIColor.pm可以得知作者是利用ANSI转义序列，改变终端字符颜色的。
+#print "/e[34m/n";
+#即是改变前景色为blue;
+
+#shell命令为echo -e "/033[31m";#改变前景色为红色。
+#(freeBSD，Solaris下此命令测试OK)
+

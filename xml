@@ -1,0 +1,28 @@
+#!/usr/bin/perl -w
+use strict;
+use XML::Simple;
+my $text = <<xml;
+< ?xml version="1.0"? >
+<web-app>
+  <servlet>
+    <servlet-name>php</servlet-name>
+    <servlet-class>net.php.servlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>php</servlet-name>
+    <url-pattern>*.php</url-pattern>
+  </servlet-mapping>
+</web-app>
+xml
+my $x = XMLin($text);
+foreach my $tag(keys %$x)
+{      
+   my %h = %{$$x{$tag}};
+   foreach(keys %h)
+   {      
+      print "$tag => ";
+      print "$_ => $h{$_}/n";
+   }
+}
+exit 0; 
+

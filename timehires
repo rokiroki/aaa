@@ -1,0 +1,20 @@
+#!/usr/bin/perl
+use strict;
+use Time::HiRes qw(sleep time);
+
+$| = 1;
+my $before = time;
+for my $i (1..100)
+{
+   print "$i/n";
+   sleep(0.01);   
+}
+printf("time used : %.5f seconds/n", time - $before);
+exit 0; 
+
+
+#use Time::HiRes后，此模块提供sleep(), alarm(), time()的增强版以
+#取代perl内置的相应函数。
+#其中sleep()和alarm()的参数可以是小数。比如sleep(0.1)表示休眠0.1秒，
+#time()可以返回浮点数。
+

@@ -1,0 +1,22 @@
+
+#!/usr/bin/perl
+
+#用于数组比较。
+#本例实现类似shell command - diff的功能。
+#如果我们要比较的不是文件，而是比如系统信息，远程文件列表，数据库内容变化等，这个模块会给我们提供方便灵活的操作。
+use Array::Compare;
+
+$comp = Array::Compare->new(WhiteSpace => 1);
+$cmd = "top -n1 | head -4";
+@a1 = `$cmd`;
+@a2 = `$cmd`;
+
+@result = $comp->full_compare(@a1, @a2);
+
+foreach(@result)
+{
+   print $_ + 1, "th line:/n";
+   print "> $a1[$_]> $a2[$_]";
+   print "-----/n";
+}
+exit 0; 

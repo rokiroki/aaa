@@ -1,0 +1,18 @@
+#!/usr/bin/perl
+use strict;
+use Term::ANSIColor qw(:constants);
+
+$Term::ANSIColor::AUTORESET = 1;
+
+$| = 1;
+
+print "/e[20;40H";
+my $str = "Welcome to chinaunix ^_^!/n";
+
+print BOLD BLINK $str;
+exit 0; 
+
+
+#转义序列echo -e "/033[20;40H";可以改变光标位置。
+#perl中就可以：print "/e[20;40H";
+

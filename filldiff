@@ -1,0 +1,27 @@
+
+#!/usr/bin/perl
+#用于文件比较。
+#实现类似unix command diff的功能。
+use Algorithm::Diff qw(diff);
+
+die("Usage: $0 file1 file2/n") if @ARGV != 2;
+
+my ($file1, $file2) = @ARGV;
+-T $file1 or die("$file1: binary/n");
+-T $file2 or die("$file2: binary/n");
+
+@f1 = `cat $file1 `;
+@f2 = `cat $file2 `;
+
+$diffs = diff(@f1, @f2);
+
+foreach $chunk (@$diffs)
+{
+   foreach $line (@$chunk)
+   {
+      my ($sign, $lineno, $text) = @$line;
+       printf "$sign%d %s", $lineno+1, $text;
+   }
+
+   print "--------/n";
+} 

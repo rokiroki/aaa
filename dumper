@@ -1,7 +1,8 @@
-#!/usr/bin/perl
-use Data::Dumper;
+#!/usr/bin/perl -w
 use strict;
+use Data::Dumper;
 
-my $foo='aa';
-my $bar=9999;
-print Data::Dumper->Dump([$foo,$bar],[qw(foo *ary)]);
+print Dumper(@INC);
+print Dumper(%ENV);
+exit 0; 
+

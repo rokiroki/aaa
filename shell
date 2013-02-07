@@ -1,0 +1,13 @@
+#!/usr/bin/perl
+use strict;
+use Shell;
+
+print "now is : ", date();
+print "current time is : ", date("+%T");
+
+my @dirs = ls("-laF");
+foreach(@dirs)
+{
+   print if(/$/);#print directory
+}
+exit 0; 

@@ -1,0 +1,43 @@
+    use MIME::Lite;
+    use MIME::Words qw(encode_mimewords);
+
+    sub send_email {
+
+        my $self = shift;
+        my $to_address = shift;
+
+        my $subject = encode_mimewords("这里是中文标题",'Charset','GB2312');
+        my $data =<<EOF;
+    <body>
+    <p>这里是中文HTML内容。</p>
+    </body>
+    EOF
+
+        my $msg = MIME::Lite->new (
+            From => 'you@example.com',
+            To => $to_address,
+            Subject => $subject,
+            Type     => 'text/html',
+            Data     => $data,
+            Encoding => 'base64',
+        ) or die "create container failed: $!";
+
+        $msg->attr('content-type.charset' => 'GB2312');
+        $msg->send('smtp','localhost',Debug=>0);
+    }
+
+复制代码
+几个常识点：
+
+1. 标题必须用MIME::Words编码，很多人忽略了这点。
+2. MIME::Lite构造信件时，Type不要搞错。例如只是一封HTML邮件，没有附件之类，Type就是text/html。
+21CN的webmail发信不管有没有附件，Type都是multipart/mixed，结果被Gmail直接扔进垃圾箱。
+3. 信件要选择传输编码（Encoding），常用的是base64和quoted-printable，我推荐base64。
+4. 信件body的content-type charset要设置正确，例如中文GB2312。
+5. 最后一句$msg->send('smtp','localhost',Debug=>0)调用Net::SMTP发信，本机安装了MTA例如Postfix就可以。
+这个发信IP最好是信誉比较好的IP，没有列入sorbs、spamcop、spamhaus等RBL列表里。
+6. 发信IP最好有反向解析（PTR），否则肯定发不到AOL之类的验证反解的邮箱。
+7. 那个From地址也最好真实存在，但是不要用知名网站的免费邮箱，例如From => 'abc@126.com'，那么基本发不出去。
+为什么？因为126.com设置了SPF，接收方MTA多半会验证这个SPF，你的IP当然不在126的SPF里，所以通不过验证。
+8. $data变量包含的是信件body的HTML编码，这个body里不要有很多链接、图片之类，否则容易被Spamassassin之类的反垃圾软件干掉。
+9. 最后，控制发送频率，大量的发送会引起各个反垃圾系统的警惕，并将你列入黑名单。

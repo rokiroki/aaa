@@ -1,0 +1,10 @@
+#!/usr/bin/perl
+use strict;
+use Date::Manip;
+
+my $date=&DateCalc("today","-1 days", 0);#yesterday
+my $date=&UnixDate($date, "%Y-%m-%d %T");
+
+print "$date/n";
+exit 0; 
+

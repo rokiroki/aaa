@@ -1,0 +1,36 @@
+#!/usr/bin/perl
+use strict;
+use Net::POP3;
+use Data::Dumper;
+
+my $user = "user";
+my $pass = shift or die "Usage : $0 passwd/n";
+my $host = "pop3.web.com";#pop3 address
+
+my $p = Net::POP3->new($host) or die "Can't connect $host!/n";
+$p->login($user, $pass) or die "user or passwd error!/n";
+my $title = $p->list or die "No mail for $user/n";
+
+foreach my $h(keys %$title)
+{
+   my $msg = $p->get($h);
+   print @$msg;   
+}
+$p->quit;
+exit 0; 
+#telnet pop3.web.com 110 也可以直接连到pop3 server上，然后通过
+#pop3命令与邮件服务器交互，
+#简单的命令有：
+#USER name
+#PASS string
+
+#STAT
+#LIST [n]
+#RETR msg
+#DELE msg
+#NOOP
+#RSET
+#QUIT
+#有兴趣的朋友可以试一试。
+#这样，也就可以利用Net::Telnet来做一个收信件的简单程序。
+

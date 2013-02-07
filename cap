@@ -1,0 +1,33 @@
+#!/usr/bin/perl
+use strict;
+use Term::Cap;
+
+$| = 1;
+my $i = 1;
+my $flag = 0;
+
+my $tcap = Term::Cap->Tgetent({TERM => undef, OSPEED => 1});
+$tcap->Tputs('cl', 1, *STDOUT);#clear screen
+
+while($i)
+{
+   if($i > 50 || $flag == 1)
+   {
+      $i --;
+      $flag = 1;
+      $flag = 0 if($i == 1);
+   }
+   else
+   {
+      $i ++;   
+      $flag = 0;
+   }
+
+   $tcap->Tgoto('cm', $i, 15, *STDOUT);#move cursor
+   print " welcome to chinaunix! ";
+   select(undef, undef, undef, 0.02);
+}
+exit 0; 
+#Term::Cap 终端控制模块。
+#代码效果：一个左右移动的字串 "welcome to chinaunix! " ：）
+

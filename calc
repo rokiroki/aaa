@@ -1,0 +1,30 @@
+#!/usr/bin/perl
+use strict;
+use Date::Calc qw(Calendar Today);
+
+my $year = "2003";
+my $month = "6";
+my $day;
+
+
+my $cal = Calendar($year, $month);
+(undef, undef, $day) = Today();
+
+$cal =~ s/$day/e[5me[31m$daye[0m/;
+
+print $cal;
+exit 0; 
+
+
+#本例子打印出一个2003年6月份的日历，当天日期用红色的闪烁数字表示。
+
+#Date::Calc提供了时间日期计算的另一种方式（一种是Date::Manip），
+#大量简单方便的方法（函数）供使用者调用。
+
+#在例子中的年和月我是自己指定的，也可以
+#($year, $month, $day) = Today();
+
+#颜色和闪烁是用ANSI escape sequences。
+#详细说明尽在ANSIColor.pm source和perldoc Term::ANSIColor里。
+#（perldoc Term::ANSIColor其实也在ANSIColor.pm source里） ：）
+

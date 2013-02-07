@@ -1,0 +1,14 @@
+#!/usr/bin/perl
+use strict;
+use Compress::Zlib;
+
+my $gz = gzopen("a.gz", "rb");
+
+while( $gz->gzreadline(my $line) > 0 )
+{
+   chomp $line;
+   print "$line/n";
+}
+
+$gz->gzclose();
+exit 0;

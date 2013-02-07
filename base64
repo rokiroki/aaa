@@ -1,0 +1,17 @@
+#!/usr/bin/perl -w
+
+use strict;
+use MIME::Base64;
+
+foreach(<DATA>)
+{
+   print decode_base64($_);
+}
+exit 0; 
+__DATA__
+xOO6w6Osu7bTrcC0tb1jaGluYXVuaXguY29tIFtwZXJsXbDmIQo=
+1eLKx2Jhc2U2NLHgwuu1xMD919OjrNPJTUlNRTo6QmFzZTY0xKO/6cC0veLC66GjCg==
+cGVybGRvYyBNSU1FOjpCYXNlNjQgZm9yIGRldGFpbHMsIGVuam95IGl0IDopCg==
+
+
+#用来处理MIME/BASE64编码。

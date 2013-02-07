@@ -1,0 +1,31 @@
+#!/usr/bin/perl
+use Net::LDAP;
+
+## get a object of ldap
+$ldap = Net::LDAP->new("1.1.1.1", port =>"389", version => 3) or die "$@";
+# object of Net::LDAP::Message
+$mesg = $ldap->bind($_cer_id, password => $_cer_pw); # 查詢用的ID/PASSWD
+if($mesg->is_error) {die $mesg->error;}
+$mesg = $ldap->search(
+         base => "o=abc,c=tt", # 起始點
+         scope => "sub", # 範圍
+         filter => "(uid=apile)", # 條件
+         attrs => ["cn"], # 要取得的attribute
+         typesonly => 0   );
+
+my $max_len = $mesg->count; ## get number of entry
+
+#--取得中文姓名，可能不只一筆
+for($i=0;$i<$max_len;$i++){
+   $entry = $mesg->entry($i);
+   $cname = $entry->get_value("cn"); # get chinese name
+}
+
+#--作密碼認證
+$mesg = $ldap->bind($entry->dn, password => "abc", version => 3)
+||die "can't connect to ldap";
+if($mesg->code) { print "verification is failed"}
+else{ print "success"} 
+
+#LDAP version 3..可以用於查詢基本資料、驗證密碼之用..
+

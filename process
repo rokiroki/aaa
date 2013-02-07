@@ -1,0 +1,13 @@
+#!/usr/bin/perl
+use strict;
+use Proc::ProcessTable;
+
+my $pt = new Proc::ProcessTable;
+
+foreach(reverse sort @{$pt->table})
+{
+   print $_->pid, " => ";
+   print $_->cmndline, "/n";
+}
+exit 0; 
+ 

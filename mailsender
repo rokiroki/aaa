@@ -1,0 +1,157 @@
+
+(38) Mail::Sender
+
+（1）发送附件
+#!/usr/bin/perl
+
+use Mail::Sender;
+
+$sender = new Mail::Sender{
+                     smtp => 'localhost',
+                     from => 'xxx@localhost'
+                     };
+$sender->MailFile({
+               to => 'xxx@xxx.com',
+               subject => 'hello',
+               file => 'Attach.txt'
+               });
+$sender->Close();
+
+print $Mail::Sender::Error eq "" ? "send ok!/n" : $Mail::Sender::Error; 
+
+devel 	03-12-07 20:57
+（2）发送html内容
+#!/usr/bin/perl
+
+use Mail::Sender;
+
+open(IN, "< ./index.html") or die("");
+
+$sender = new Mail::Sender{
+                     smtp => 'localhost',
+                     from => 'xxx@localhost'
+                     };
+
+$sender->Open({
+               to => 'xxx@xxx.com',
+               subject => 'xxx',
+               msg => "hello!",
+               ctype => "text/html",
+               encoding => "7bit",
+               });
+
+while(<IN>)
+{
+   $sender->SendEx($_);
+}
+close IN;
+$sender->Close();
+
+print $Mail::Sender::Error eq "" ? "send ok!/n" : $Mail::Sender::Error; 
+发送带有图片或其他信息的html邮件，请看`perldoc Mail::Sender`
+中的“Sending HTML messages with inline images”及相关部分。
+
+devel 	04-01-08 21:00
+40 Image::Magick
+提供者：
+http://www.imagemagick.org/www/perl.html
+
+代码:
+#!/usr/local/bin/perl
+    use Image::Magick;
+
+    my($image, $x);
+
+    $image = Image::Magick->new;
+    $x = $image->Read('girl.png', 'logo.png', 'rose.png');
+    warn "$x" if "$x";
+
+    $x = $image->Crop(geometry=>'100x100"+100"+100');
+    warn "$x" if "$x";
+
+    $x = $image->Write('x.png');
+    warn "$x" if "$x";
+
+
+
+
+The script reads three images, crops them, and writes a single image as a GIF animation sequence. In many cases you may want to access individual images of a sequence. The next example illustrates how this is done:
+代码:
+    #!/usr/local/bin/perl
+    use Image::Magick;
+
+    my($image, $p, $q);
+
+    $image = new Image::Magick;
+    $image->Read('x1.png');
+    $image->Read('j*.jpg');
+    $image->Read('k.miff[1, 5, 3]');
+    $image->Contrast();
+    for ($x = 0; $image->[x]; $x++)
+    {
+      $image->[x]->Frame('100x200') if $image->[x]->Get('magick') eq 'GIF';
+      undef $image->[x] if $image->[x]->Get('columns') < 100;
+    }
+    $p = $image->[1];
+    $p->Draw(stroke=>'red', primitive=>'rectangle', points=>20,20 100,100');
+    $q = $p->Montage();
+    undef $image;
+    $q->Write('x.miff');
+
+Suppose you want to start out with a 100 by 100 pixel white canvas with a red pixel in the center. Try
+
+    $image = Image::Magick->new;
+    $image->Set(size=>'100x100');
+    $image->ReadImage('xc:white');
+    $image->Set('pixel[49,49]'=>'red');
+
+Or suppose you want to convert your color image to grayscale:
+
+    $image->Quantize(colorspace=>'gray');
+
+Here we annotate an image with a Taipai TrueType font:
+
+    $text = 'Works like magick!';
+    $image->Annotate(font=>'kai.ttf', pointsize=>40, fill=>'green', text=>$text);
+
+Other clever things you can do with a PerlMagick objects include
+
+    $i = $#$p"+1";  # return the number of images associated with object p
+    push(@$q, @$p);  # push the images from object p onto object q
+    @$p = ();        # delete the images but not the object p
+    $p->Convolve([1, 2, 1, 2, 4, 2, 1, 2, 1]);  # 3x3 Gaussian kernel
+
+devel 	04-04-08 18:15
+41.Data::SearchReplace
+
+代码:
+        use Data::SearchReplace ('sr');
+        sr({ SEARCH => 'searching', REPLACE => 'replacing'}, /$complex_var);
+                                                                                               
+        # or OO
+                                                                                               
+        use Data::SearchReplace;
+        $sr = Data::SearchReplace->new({ SEARCH => 'search for this',
+                                          REPLACE => 'replace with this' });
+                                                                                               
+        $sr->sr(/$complex_var);
+        $sr->sr(/$new_complex_var);
+                                                                                               
+        # if you want more control over your search/replace pattern you
+        #  can pass an entire regex instead complete with attributes
+                                                                                               
+        sr({ REGEX => 's/nice/great/gi' }, /$complex_var);
+                                                                                               
+        # you can even use a subroutine if you'd like
+        #  the input variable is the value and the return sets the new
+        #  value.
+                                                                                               
+        sr({ CODE => sub { uc($_[0]) } }, /$complex_var);
+
+
+代码:
+        use Data::SearchReplace qw(sr);
+        sr({SEARCH => 'find', REPLACE => 'replace'}, /@data);
+        sr({REGEX  => 's/find/replace/g'}, /%data);
+        sr({CODE  => sub {uc($_[0])} }, /@data);
+

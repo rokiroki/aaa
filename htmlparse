@@ -1,0 +1,32 @@
+
+#!/usr/bin/perl
+#解析HTML。本例为找出一个html文本中的所有图片的地址。（即IMG标签中的src）
+
+#子程序start中的“$tag =~ /^img$/”为过滤出img标签。
+#如果换为“$tag =~ /^a$/”，即是找出所有的链接地址。
+
+#详细的方法介绍，请见`perldoc HTML::Parser`
+use LWP::Simple;
+use HTML::Parser;
+
+my $url = shift || "http://www.chinaunix.net";
+my $content = LWP::Simple::get($url) or die("unknown url/n");
+
+my $parser = HTML::Parser->new(
+         start_h => [&start, "tagname, attr"],
+         );
+
+$parser->parse($content);
+exit 0;
+
+sub start
+{
+   my ($tag, $attr, $dtext, $origtext) = @_;   
+   if($tag =~ /^img$/)
+   {   
+      if (defined $attr->{'src'} )
+      {
+         print "$attr->{'src'}/n";   
+      }
+   }
+} 

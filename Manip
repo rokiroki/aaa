@@ -1,0 +1,21 @@
+#!/usr/bin/perl
+use strict;
+use Date::Manip;
+my $date1 = "Fri Jun  6 18:31:42 GMT 2003";
+my $date2 = "2003/05/06";
+my $flag=&Date_Cmp($date1,$date2);
+
+if($flag<0)
+{
+   print "date1 is earlier!/n";
+}
+elsif($flag==0)
+{
+   print "the two dates are identical!/n";
+}
+else
+{
+   print "date2 is earlier!/n";
+}
+exit 0; 
+

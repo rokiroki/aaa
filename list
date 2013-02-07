@@ -1,0 +1,12 @@
+#!/usr/bin/perl
+
+use List::Util qw/max min sum maxstr minstr shuffle/;
+
+@s = ('hello', 'ok', 'china', 'unix');
+
+print max 1..10;      #10
+print min 1..10;      #1
+print sum 1..10;      #55
+print maxstr @s;      #unix
+print minstr @s;      #china
+print shuffle 1..10;   #radom order 

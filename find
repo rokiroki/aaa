@@ -1,0 +1,12 @@
+#!/usr/bin/perl -w
+use strict;
+use File::Find;
+
+my $file = "access.log";
+my $path = "/";
+
+find(&process, $path);
+
+sub process{ print $File::Find::dir, "$_/n" if(/$file/); }
+
+exit 0;

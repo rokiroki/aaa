@@ -1,0 +1,29 @@
+#!/usr/bin/perl
+
+use Benchmark;
+
+timethese(100,
+   {
+      'local'=>q
+            {
+               for(1..10000)
+               {
+                  local $a=$_;
+                  $a *= 2;
+               }
+            },
+
+      'my'=>q
+         {
+            for(1..10000)
+            {
+               my $a=$_;
+               $a *= 2;
+            }
+         }
+   }); 
+#可以拿?硭隳硞algorithm耗費多少時間..
+#timethese(做幾次iteration,{
+#'Algorithm名稱'=>q{ 要計算時間的algorithm },
+#'Algorithm名稱'=>q{ 要計算時間的algorithm }
+#});

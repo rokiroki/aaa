@@ -1,0 +1,13 @@
+#!/usr/bin/perl -w
+#file:remoteps.pl
+use strict;
+use Net::Telnet;
+use constant HOST => 'phage.cshl.org';
+use constant USER => 'lstein';
+use constant PASS => 'xyzzy';
+
+my $telnet=Net::Telnet->new(HOST);
+$telnet->login(USER,PASS);
+my @lines=$telnet->cmd('ps -ef');
+print @lines;
+

@@ -1,0 +1,10 @@
+#!/usr/bin/perl -w
+use strict;
+use LWP::Simple qw(get);
+
+my $url = shift || "http://www.chinaunix.net";
+my $content = get($url);
+
+print $content;
+
+exit 0;

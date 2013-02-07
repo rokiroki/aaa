@@ -1,0 +1,14 @@
+#!/usr/bin/perl
+use strict;
+use Net::Telnet;
+
+my $p = Net::Telnet->new();
+my $h = shift || "www.chinaunix.net";
+
+$p->open(Host => $h, Port => 80);
+$p->print("GET //n");
+while(my $line = $p->getline())
+{
+   print $line;
+}
+exit 0; 

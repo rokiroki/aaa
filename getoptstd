@@ -1,0 +1,14 @@
+#!/usr/bin/perl
+use strict;
+use Getopt::Std;
+
+my %opts;
+getopts("c:hv", %opts);
+
+foreach(keys %opts)
+{
+   /c/ && print "welcome to ", $opts{$_} || "ChinaUnix", "!/n";
+   /h/ && print "Usage : $0 -[hv] -[c msg] /n";
+   /v/ && print "This is demo, version 0.001.001 built for $^O/n";
+}
+exit 0; 

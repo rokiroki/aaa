@@ -1,0 +1,36 @@
+#!/usr/bin/perl
+
+use strict;
+use Text::CSV_XS;
+###如果field里面也包含分隔符(比如"tom,jack,jeff","rose mike",O'neil,"kurt,korn")，那么我们解析起来确实有点麻烦，
+#Text::CSV_XS挺方便。
+my @columns;
+my $csv = Text::CSV_XS->new({
+                     'binary' => 1,
+                     'quote_char'  => '"',
+                         'sep_char'    => ','      
+                     }); 
+
+foreach my $line(<DATA>)
+{
+   chomp $line;
+   if($csv->parse($line))
+   {
+      @columns = $csv->fields();
+   }
+   else
+   {
+      print "[error line : ", $csv->error_input, "]/n";
+   }
+
+   map {printf("%-14s/t", $_)} @columns;
+   print "/n";
+}
+exit 0; 
+
+__DATA__
+id,compact_sn,name,type,count,price
+37,"ITO-2003-011","台式机,compaq","128M","290","1,2900"
+35,I-BJ-2003-010,"显示器,硬盘,内存",'三星',480,"1,4800"
+55,"C2003-104",笔记本,"Dell,Latitude,X200",13900,"1,13900"
+

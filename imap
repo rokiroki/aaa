@@ -1,0 +1,35 @@
+#!/usr/bin/perl
+
+use strict;
+use Net::IMAP::Simple;
+
+my $server = new Net::IMAP::Simple( 'imap.0451.com' );
+$server->login( 'user_name', 'passwd');
+
+#show the mailboxs
+#map {print "$_/n";} $server->mailboxes();
+
+#show mail's content
+my $n = $server->select( 'inbox' ) or die "no this folder/n";
+foreach my $msg ( 1..$n )
+{
+    my $lines = $server->get( $msg );
+    print @$lines;
+   print "_________________ Press enter key to view another! ...... __________________/n";
+   read STDIN, my $key, 1;
+}
+
+exit 0; 
+
+
+#在取得中文的Folder时，会出现乱码的情况，
+#这个问题现在没有解决。英文的Folder则没问题。
+
+
+#IMAP协议，默认端口为143，可以用telnet登录。
+
+#telnet imap.xxx.com 143
+#2 login user pass
+#2 list "" *
+#2 select inbox
+#......

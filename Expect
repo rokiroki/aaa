@@ -1,0 +1,18 @@
+#!/usr/bin/perl
+use strict;
+use Expect;
+
+my $timeout = 2;
+my $delay = 1;
+my $cmd    = "ssh";
+my @params = qw/202.108.xx.xx -lusername -p22/;
+my $pass = "passwd";
+
+my $exp = Expect->spawn($cmd, @params) or die "Can't spawn $cmd/n";
+$exp->expect($timeout, -re=>'[Pp]assword:');
+$exp->send_slow($delay, "$pass/r/n");
+
+$exp->interact();
+$exp->hard_close();
+
+exit 0; 
