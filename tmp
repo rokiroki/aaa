@@ -1,0 +1,864 @@
+***********************************************
+http://jsfiddle.net/uep3T/3/
+highcharts.js
+ppt project
+http://search.cpan.org/dist/ppt/
+perl -MCPAN -e shell 
+***********************************************
+
+
+
+***********************************************
+python
+name =  MySQLdb.escape_string(name);     //不处理特殊字符
+***********************************************
+
+***********************************************
+//带checkbox的select
+function changeTeam(obj){
+    var liArray=document.getElementsByName("teamLi");
+    var i=0;
+    var length=liArray.length;
+    switch(nextTeamState){
+    case 1:
+        obj.innerHTML="submit";
+         for(;i<length;i++){
+            liArray[i].className="liShow";
+        }
+        nextTeamState=0;
+        break;
+    case 0:
+        obj.innerHTML="filter";
+        for(;i<length;i++){
+            liArray[i].className="liHide";
+        }
+        nextTeamState=1;
+        var alchecked = document.getElementById("teamAll").checked;
+        var allcheckboxs=document.getElementsByName("teamcheckbox");
+        var filterstring = "";
+        if(alchecked == true){
+            oTable.fnFilter("",7);
+        }else{
+            for(j=0;j<allcheckboxs.length;j++){
+                if(allcheckboxs[j].checked == true){
+                    filterstring += allcheckboxs[j].id+"|";
+                }
+            }
+            if(filterstring == ""){
+                oTable.fnFilter("",7);
+            }else{
+                filterstring = filterstring.substring(0,filterstring.length-1);
+                oTable.fnFilter(filterstring,7,false);
+            }
+        }
+    }
+}
+                    <ul id="teamselect" class="filterselect">
+                    <li id="teamsubmit" class="liMenu" onclick="changeTeam(this);">filter</li>
+                    <li  name= "teamLi" value="All" class="liHide"><input type="checkbox" id="teamAll">All</li>
+<%
+ResultSet rsteam;
+query = "select distinct TeamID  from BugAssignment where ProjectID = '"+prj+"' and WeekStart = '"+startDate+"'" + severitytmp;
+rsfilter = db.GetRecordsbySql(query);
+if(rsfilter.first()){
+    rsfilter.beforeFirst();
+    while(rsfilter.next()){
+        query = "select Name from Team where ID = '"+rsfilter.getString(1)+"'";
+        rsteam = db.GetRecordsbySql(query);
+        if(rsteam.first()){
+            String id = rsteam.getString(1);
+            rsteam.close();
+%>
+                    <li  name= "teamLi" value="<%=id%>" class="liHide"><input type="checkbox" name="teamcheckbox" id="<%=id%>"><%=id%></li>
+<%
+        }
+    }
+}
+rsfilter.close();
+%>
+                </ul> 
+*****************************************************
+
+****************************************
+  $(document).ready(function() {
+     // Init the table
+     // $('#brief_table').dataTable({
+     oTable = $('table[id*="brief_table"]').dataTable({
+        "aaSorting": [[ 1, "desc" ]],                       //默认排序
+        "bFilter":true,                                             //开启全局搜索
+	"bPaginate" : false,                                        //禁止分页
+     });
+    
+   $('.filterselect').click(function(event){
+    event.stopPropagation();                            //禁止事件冒泡
+    });
+
+     });
+****************************************
+
+********************************
+  <a href="javascript:scroll(0,0)">Top</a>    //跳到头
+********************************
+
+***********************************************
+解决UnicodeEncodeError: 'ascii' codec can't encode characters in position 0-3问题
+字符集的问题，在文件前加两句话：
+reload(sys)
+sys.setdefaultencoding( "utf-8" )
+***********************************************
+
+***********************************************
+#get sunday
+now = datetime.datetime.now()
+weeknum = now.weekday()+1
+delta = datetime.timedelta(days=weeknum)
+sunday = now - delta
+startDate = sunday.strftime('%Y-%m-%d')
+print startDate
+***********************************************
+
+***********************************************
+alias ls='ls -l'             指令别名
+***********************************************
+
+**********************************************************************************************
+mysql limit
+select count(blue) from (select * from history  limit 0, 30) t where blue = 01
+**********************************************************************************************
+
+**********************************************************************************************
+get customer's resolution 获取客户端分辨率
+var height = window.screen.height;
+var width = window.screen.width;
+**********************************************************************************************
+
+**********************************************************************************************
+//get other language return
+String path=request.getRealPath("."); 
+Process p = Runtime.getRuntime().exec("perl "+path.substring(0,path.length()-1)+"rr");
+BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
+String err;
+while ((err = br.readLine()) != null){
+%>
+<%=err%>
+<%
+}
+%>
+**********************************************************************************************
+
+**********************************************************************************************
+//odd/even tr/td
+  $(document).ready(function() {
+     $('tr:nth-child(odd)').addClass('odd-row');
+     $('tr:nth-child(even)').addClass('even-row');	
+     $('td:nth-child(odd)').addClass('odd-column');	
+     $('td:nth-child(even)').addClass('even-column');
+     $('#project-summary  td').addClass('even-column');	
+     $('td:nth-child(1)').removeClass('even-column').addClass('odd-column');	
+     });
+  $(document).ready(function() {
+     $('#summary-top10').click(function(){
+		$('#top10').fadeIn("fast");
+		$('#con-top10').fadeIn("slow");
+	});
+     $('#close-top').click(function(){
+		$('#top10').fadeOut("fast");
+		$('#con-top10').fadeOut("slow");
+	});	
+     });
+**********************************************************************************************
+
+**********************************************************************************************
+//focus invalid input
+  if(document.all.backlognumber.value=="")
+  {
+    alert("Backlog ID is empty!");
+    document.all.backlognumber.focus();
+    return false;
+  }
+**********************************************************************************************
+
+**********************************************************************************************
+//special float 特定位数的小数
+float aa=(new BigDecimal(blockavg).round(new MathContext(3)).floatValue())
+**********************************************************************************************
+
+**********************************************************************************************
+//find special file
+	    public static String findFiles(String baseDirName, String targetFileName) throws Exception {   
+	        String tempName = null;   
+	        File baseDir = new File(baseDirName);   
+		  try{
+	            String[] filelist = baseDir.list();   
+	            for (int i = 0; i < filelist.length; i++) {   
+	                File readfile = new File(baseDirName + "/" + filelist[i]);  
+	                String[] subfilelist = readfile.list();
+	                for(int j=0;j<subfilelist.length;j++){
+	                	File subreadfile = new File(baseDirName + "/" + filelist[i]+"/"+subfilelist[j]); 
+		                String[] subsubfilelist = subreadfile.list();
+		                for(int k=0;k<subfilelist.length;k++){
+		                	File subsubreadfile = new File(baseDirName + "/" + filelist[i]+"/"+subfilelist[j]+"/"+subsubfilelist[k]);
+		                	tempName =  subsubreadfile.getName();    
+		                	if (JiraBDData.wildcardMatch(targetFileName, tempName)) {   
+		                		return subsubreadfile.getAbsoluteFile().toString();    
+	                    	}
+	                    }
+	            }   
+	        }   
+			}catch(Exception e){
+				return null;
+			}
+	            return null;
+	    }   
+**********************************************************************************************
+
+**********************************************************************************************
+//FCF   http://hi.baidu.com/javaman/item/684adcfe5d3cd348c8f33707
+String path=request.getRealPath(".");
+path = path.substring(0,path.length()-1)+ "Datawu.xml";
+StringBuilder strXML=new StringBuilder("<graph  caption='Weekly Bug Prediction Update'  lineThickness='1' animation='1' showNames='1' alpha='100' showLimits='1' decimalPrecision='0'  numDivLines='3' divlinecolor='87CEFA' limitsDecimalPrecision='0' canvasBgColor='87CEFA' showLegend='0' showValues='1' bgColor='87CEFA' baseFont='Times' baseFontSize='13'> <categories>");  
+strXML.append(weeks);
+strXML.append("</categories><dataset seriesname='Predication of remaining bugs' color='F0807F' showValue='1'>");
+strXML.append(antmp);
+strXML.append("</dataset><dataset seriesname='Bugs reported ' color='B22222' showValue='1'>");
+strXML.append(remaintmp);
+strXML.append("</dataset></graph>");
+String xml=new String(strXML);
+FileWriter fw=new FileWriter(path);
+fw.write(xml,0,xml.length());                       
+fw.close();
+	<jsp:include page="3pp/FusionChartsFree/FusionChartsHTMLRenderer.jsp" flush="true"> 
+	<jsp:param name="chartSWF" value="3pp/FusionChartsFree/FCF_StackedColumn3D.swf" /> 
+	<jsp:param name="strURL" value="Datawu.xml" /> 
+	<jsp:param name="strXML" value="" /> 
+	<jsp:param name="chartId" value="chart" /> 
+	<jsp:param name="chartWidth" value="350" /> 
+	<jsp:param name="chartHeight" value="200" /> 
+	<jsp:param name="debugMode" value="false" /> 	
+	</jsp:include>
+**********************************************************************************************
+
+**********************************************************************************************
+//get date
+Calendar cal = Calendar.getInstance();
+final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+Date dd = sdf.parse(endDate);
+cal.setTime(dd);
+int day = cal.get(Calendar.DATE);
+day = day-dayNumber;
+cal.set(Calendar.DATE,day);
+String startDate = sdf.format(cal.getTime());
+//get week date
+Calendar cal = Calendar.getInstance();
+final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+Date dd = sdf.parse(date);
+cal.setTime(dd);
+int n = 0;
+String sunday;
+cal.add(Calendar.DATE, n*7);
+cal.set(Calendar.DAY_OF_WEEK,Calendar.SUNDAY);
+sunday = sdf.format(cal.getTime());
+cal.set(Calendar.DAY_OF_WEEK,Calendar.SATURDAY);
+String saturday = new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime());
+//get month date
+final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+Date dd = sdf.parse(date);
+Calendar cal=Calendar.getInstance();
+cal.setTime(dd);
+cal.set(Calendar.DAY_OF_MONTH,1);
+String start=sdf.format(cal.getTime());
+int days=cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+cal.set(Calendar.DAY_OF_MONTH,days);
+String end=sdf.format(cal.getTime());
+**********************************************************************************************
+
+**********************************************************************************************
+//firefox round corner
+-moz-border-radius-bottomleft: 5px;
+-moz-border-radius-bottomright: 5px;
+-webkit-border-bottom-right-radius: 5px; 
+-webkit-border-bottom-left-radius: 5px;
+**********************************************************************************************
+
+**********************************************************************************************
+//get row number
+var table = document.getElementById("brief_table");
+var lastRow = table.rows.length - 1;
+var i = lastRow;
+document.getElementById("formNumber").value = lastRow;
+**********************************************************************************************
+
+**********************************************************************************************
+//set selected
+var bugselect = document.getElementById("bugsource");
+for (var i = 0; i < bugselect.length; i++) {
+   if (bugselect.options[i].value == "<%=bugsource%>") {
+       bugselect.options[i].selected = true;
+       break;
+     }
+}
+**********************************************************************************************
+
+**********************************************************************************************
+//return 
+history.go(-1)
+**********************************************************************************************
+
+
+**********************************************************************************************
+//piechart
+function showchart() {
+var chart;
+	chart = new Highcharts.Chart({
+		chart: {
+			renderTo: 'container',
+			plotBackgroundColor: null,
+			plotBorderWidth: null,
+			plotShadow: false
+		},
+		title: {
+			text: 'History data referenced'
+		},
+		tooltip: {
+			formatter: function() {
+				return '<b>'+ this.point.name +'</b>: '+ this.percentage +' %';
+			}
+		},
+		plotOptions: {
+			pie: {
+				allowPointSelect: true,
+				cursor: 'pointer',
+				//with legend
+				dataLabels: {
+					enabled: false
+				},
+				showInLegend: true
+				//with connect line
+				dataLabels: {
+					enabled: true,
+					color: '#000000',
+					connectorColor: '#000000',
+					formatter: function() {
+						return '<b>'+ this.point.name +'</b>: '+ this.percentage +' %';
+					}
+				}
+
+				
+			}
+		},
+		series: [{
+			type: 'pie',
+			name: 'bug history',
+			data: [
+				['Blocker',   bl],
+				['Major',       ma],
+				['Minor',    mi],
+				['Undefined',     un],
+			]
+		}]
+	});
+}
+**********************************************************************************************
+
+**********************************************************************************************
+//pop div
+function showHisPopup(w,h){     
+var popUp = document.getElementById("popupcontent-history");   
+popUp.style.top = "150px";     
+popUp.style.left = "500px";     
+popUp.style.width = w + "px";     
+popUp.style.height = h + "px";          
+popUp.style.visibility = "visible";
+}
+function hideHisPopup(){
+var popUp = document.getElementById("popupcontent-history");
+popUp.style.visibility = "hidden";
+return true;
+}
+#popupcontent-history{
+position: absolute;
+visibility: hidden;
+overflow: hidden;
+border:1px solid #CCC;
+background-color:#F9F9F9;
+border:1px solid #333;
+padding:5px;
+}
+**********************************************************************************************
+
+**********************************************************************************************
+//identify chosen label适用各浏览器
+document.getElementById("<%=projectID%>").style.cssText = "background:#000000;"
+**********************************************************************************************
+
+**********************************************************************************************
+//css for IE and !IE
+<!--[if IE]>
+<link rel="stylesheet" type="text/css" href="IEstyle.css" media="screen" />
+<![endif]-->
+<!--[if !IE]><!-->
+<link rel="stylesheet" type="text/css" href="style.css" media="screen" />
+<!--<![endif]-->
+**********************************************************************************************
+
+**********************************************************************************************
+//multiple select
+System Engineer:
+<select type="select" id="iseselect" name="iseselect" multiple="multiple">
+function checkse()
+{
+  o = document.all.iseselect;
+  t = document.all.iseinput;
+  var intvalue = "";
+  for(i = 0; i < o.length; i++)
+  {   
+    if(o.options[i].selected)
+    {
+      intvalue += o.options[i].value+ ",";
+    }
+  }
+  t.value = intvalue.substr(0,intvalue.length-1);
+}
+**********************************************************************************************
+
+**********************************************************************************************
+//excel operate
+import jxl.*;
+import jxl.read.biff.BiffException;
+import jxl.write.Label;
+import jxl.write.WritableCell;
+import jxl.write.WritableWorkbook;
+import jxl.write.WritableSheet;
+  public int getRowCount(String file,int sheetNumber) throws BiffException, Exception{
+	  int rowCount;
+	  InputStream is = new FileInputStream(file);
+	  jxl.Workbook rwb = Workbook.getWorkbook(is);
+	  Sheet rs = rwb.getSheet(sheetNumber);
+	  rowCount = rs.getRows();
+	  return rowCount;
+  }
+  
+  public String getBugFromCell(String file,int sheetNumber,int bugColumnNumber,int bugRowNumber)throws ClassNotFoundException,IOException,Exception{
+		  InputStream is = new FileInputStream(file);
+		  jxl.Workbook rwb = Workbook.getWorkbook(is);
+		  Sheet rs = rwb.getSheet(sheetNumber);
+		  String bug;
+		  Cell c = rs.getCell(bugColumnNumber,bugRowNumber);
+		  bug = c.getContents();
+		  is.close();
+		  rwb.close();
+		  return bug;
+  }
+  public void writeBugSeverityToExcel(String file,int sheetNumber,int bugColumnNumber,int bugRowNumber,String severity) throws BiffException, Exception{
+	  InputStream is = new FileInputStream(file);
+	  jxl.Workbook rwb = Workbook.getWorkbook(is);		
+	  jxl.write.WritableWorkbook wwb = jxl.Workbook.createWorkbook(new File(file), rwb);
+	  jxl.write.WritableSheet ws = wwb.getSheet(sheetNumber);
+	  //String id = "B2";
+	 // jxl.write.WritableCell wc = (WritableCell) ws.findCell(id);
+	  jxl.write.WritableCell wc = ws.getWritableCell(bugColumnNumber, bugRowNumber);
+	  if(wc.getType()==CellType.LABEL){
+		  Label label = (Label)wc;
+		  label.setString(severity);
+	  }else{
+		  Label label = new Label(bugColumnNumber,bugRowNumber,severity);
+		  ws.addCell(label);
+	  }
+
+	  wwb.write();
+	  wwb.close();
+	  rwb.close();
+  }	
+**********************************************************************************************
+
+**********************************************************************************************
+//js regex
+  var datetype=/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/; 
+(datetype.exec(document.all.whenpromised.value)
+**********************************************************************************************
+
+**********************************************************************************************
+//selected?
+  if(document.all.iprojectselect.value==""||document.all.iprojectselect.options[0].selected == true)
+**********************************************************************************************
+
+
+**********************************************************************************************
+//save special chars to mysql
+replaceAll("'", "''").replaceAll("\\\\", "\\\\\\\\")
+ 
+//display special chars
+replaceAll("\\\\", "\\\\\\\\").replaceAll("\r\n","\\\\r\\\\n").replaceAll("\\\"", "\\\\\\\"")
+replaceAll("\\r\\n","<br> &nbsp; &nbsp; ").replaceAll("\"","&#34").replaceAll("\\\\","&#92")
+**********************************************************************************************
+
+**********************************************************************************************
+//print
+<button onClick="window.print()">Print Card</button>
+**********************************************************************************************
+
+**********************************************************************************************
+  //below bloc is to get StartDate/EndDate of start sprint,it has to handle illegal data such as 0000-00-00 and 'void' which are not handled correctly by getString() or getDate()
+  java.io.InputStream fin = rs.getAsciiStream(Constants.sprintTableStartDateIndex);
+  if(fin != null)
+  {
+    BufferedReader in = new BufferedReader(new InputStreamReader(fin));
+    StringBuffer buffer = new StringBuffer();
+    String line = "";
+    while ((line = in.readLine()) != null){
+      buffer.append(line);
+    }
+    startSprintStartDate = buffer.toString();
+  }
+  fin = rs.getAsciiStream(Constants.sprintTableEndDateIndex);
+  if(fin != null)
+  {
+    BufferedReader in = new BufferedReader(new InputStreamReader(fin));
+    StringBuffer buffer = new StringBuffer();
+    String line = "";
+    while ((line = in.readLine()) != null){
+      buffer.append(line);
+    }
+    startSprintEndDate = buffer.toString();
+  }
+  startSprintNo = rs.getString(Constants.sprintTableSpNoIndex);
+**********************************************************************************************
+
+**********************************************************************************************
+//add/remove rows
+      function addRow()
+      {
+        var table = document.getElementById("bug_status_table");
+        var newRowIndex = table.rows.length;
+        var newRow = table.insertRow(newRowIndex);
+
+        var newSrcCell = newRow.insertCell(0);
+        var srcElement = document.createElement("select");
+        srcElement.id = "bugSrc" + newRowIndex.toString();
+        srcElement.name = "bugSrc" + newRowIndex.toString();
+        srcElement.innerHTML = document.getElementById("bugSrcOptions").value;
+        srcElement.setAttribute("onchange", "changepermission(" + newRowIndex.toString() + ")");
+        newSrcCell.appendChild(srcElement);
+
+        var newIdCell = newRow.insertCell(1);
+        var idElement = document.createElement("input");
+        idElement.type = "text";
+        idElement.name = "bugId" + newRowIndex.toString();
+        idElement.id = "bugId" + newRowIndex.toString();
+        idElement.value = "";
+        idElement.size = "8";
+        idElement.setAttribute("onkeyup", "value=value.replace(/[^\\d]/g,'')");
+        idElement.setAttribute("onbeforepaste", 
+                                "clipboardData.setData('text',clipboardData.getData('text').replace(/[^\\d]/g, ''))");
+        newIdCell.appendChild(idElement);
+
+        var newRemoveCell = newRow.insertCell(8);
+        var removeElement = document.createElement("input");
+        removeElement.type = "button";
+        removeElement.value = "Remove";
+        removeElement.id = newRowIndex.toString();
+        removeElement.name = newRowIndex.toString();
+        removeElement.setAttribute("onclick", "removeRow(" + removeElement.id + ")");
+        newRemoveCell.appendChild(removeElement);
+       }
+
+      function removeRow(rowIndex)
+      {
+        var table = document.getElementById("bug_status_table");
+        table.deleteRow(rowIndex);
+
+        // Update all the following rows' indexes
+        var length = table.rows.length;
+        for (var i = length - 1; i > rowIndex - 1; --i) {
+          var srcElement = table.rows[i].cells[0].firstChild;
+          srcElement.id = "bugSrc" + i.toString();
+          srcElement.name = "bugSrc" + i.toString();
+          var removeElement = table.rows[i].cells[8].firstChild;
+          removeElement.id = i.toString();
+          removeElement.name = i.toString();
+          removeElement.setAttribute("onclick", "removeRow(" + removeElement.id + ")");
+        }
+      }
+**********************************************************************************************
+
+**********************************************************************************************
+//mysql operate
+  public void connect() throws ClassNotFoundException,SQLException,Exception 
+  { 
+    try 
+    { 
+      String conString = "jdbc:mysql://localhost:"+ Constants.hostPort +"/" + Constants.dbName + "?jdbcCompliantTruncation=false&user=" + Constants.userName + "&password=" + Constants.passWord;
+      Class.forName("org.gjt.mm.mysql.Driver").newInstance(); 
+      conn=DriverManager.getConnection(conString); 
+    } 
+    catch(ClassNotFoundException cnfe) 
+    { 
+      error="ClassNotFoundException:Could not locate DB driver."; 
+      throw new ClassNotFoundException(error); 
+    } 
+    catch(SQLException cnfe) 
+    { 
+      error="SQLException:Could not connect to database."; 
+      throw new SQLException(error); 
+    }   
+    catch (Exception e) 
+    { 
+      error="Exception:An unknown error occurred while connecting to database."; 
+      throw new Exception(error); 
+    } 
+  } 
+
+  //database disconnection
+  public void disconnect() throws SQLException 
+  { 
+    try   
+    { 
+      if(conn!=null){ 
+        conn.close(); 
+      } 
+    } 
+    catch(SQLException sqle) 
+    { 
+      error= "SQLException:Unable to close the database connection"; 
+      throw new SQLException(error); 
+    } 
+  } 
+
+
+  public ResultSet GetRecordsbySql(String sQuery) throws SQLException,Exception
+  {
+    ResultSet rst=null;
+
+    try
+    {
+      Statement stat=conn.createStatement();
+      rst=stat.executeQuery(sQuery);
+    }
+    catch(SQLException sqle)
+    {
+      error="SQLException:Could not execute the query. ";
+      error += "The query string is: " + sQuery;
+      throw new SQLException(error);
+    }
+    catch(Exception e)
+    {
+      error="An exception occured while retrieving usergroup.";
+      throw new SQLException(error);
+    }
+    return rst;
+  }
+
+
+  public void ExecuteSql(String sql) throws SQLException, Exception
+  {
+    try
+    {
+      Statement stat = conn.createStatement();
+      stat.execute(sql);
+    }
+    catch (SQLException sqle)
+    {
+      error = "SQLException: Could not execute query. ";
+      error += "The sql string is: " + sql;
+      throw new SQLException(error);
+    }
+    catch (Exception e)
+    {
+      error = "Unknown exception occurred while executing " + sql + " statement.";
+      throw new Exception(error);
+    }
+  }
+
+//select option
+  public StatusOptions(String dbName) throws SQLException, Exception
+  {
+    statusTableName = Constants.statusTableName;
+    databaseName = dbName;
+    scrumSummary.connect();
+    String query = "select * from "+statusTableName;
+    ResultSet rs = scrumSummary.GetRecordsbySql(query);
+    
+    allOptions = "";
+    rs.beforeFirst();
+    while (rs.next()) {
+      allOptions += "<option value='" + rs.getString(1)  + "'>" + rs.getString(2) + "</option>";
+    }
+
+    selectedId = "";
+
+    rs.close();
+    scrumSummary.disconnect();
+  }
+
+  public String getSelectedOptions() throws SQLException, Exception
+  {
+    String selectedOptions = "";
+
+    if (selectedId.equals("")) {
+      selectedOptions = allOptions;
+    } else {
+      scrumSummary.connect();
+      String query = "select * from "+statusTableName;      
+      ResultSet rs  = scrumSummary.GetRecordsbySql(query);
+
+      rs.beforeFirst();
+      while (rs.next()) {
+        selectedOptions += "<option value='" + rs.getString(1);
+        if (selectedId.equals(rs.getString(1))) {
+          selectedOptions += "' selected='selected";
+        }
+        selectedOptions += "'>" + rs.getString(2) + "</option>";
+      }
+
+      rs.close();
+      scrumSummary.disconnect();
+    }
+
+    return selectedOptions;
+  }
+**********************************************************************************************
+
+**********************************************************************************************
+//url date
+  public static String getText(String urlStr){
+      StringBuffer result =new StringBuffer();
+      String temp =null ;
+      BufferedReader reader = null;
+      URL url;
+      try{
+        url = new URL(urlStr);
+        HttpURLConnection httpUrl = (HttpURLConnection)url.openConnection();
+        reader = new BufferedReader(new InputStreamReader(httpUrl.getInputStream()));
+        while((temp=reader.readLine())!=null){
+        result.append(temp);
+        }
+      }catch (Exception e) {
+        e.printStackTrace();
+      }finally{
+        try{
+          if(reader!=null){
+            reader.close();
+          }
+
+        }catch (Exception e) {
+          e.printStackTrace();
+        }
+      }
+      return result.toString();
+  }
+  public String getStringByRegex(String src,String regex){
+	  Pattern pattern=Pattern.compile(regex);
+	  Matcher matcher=pattern.matcher(src);
+	  String str = null;
+	  if(matcher.find()){
+		  str=matcher.group(1);
+	  }
+	  return str;
+  }
+**********************************************************************************************
+
+
+**********************************************************************************************
+///get workday
+ package database;     
+
+ import java.text.SimpleDateFormat;     
+ import java.util.Calendar;     
+ import java.util.Date;     
+ import java.util.GregorianCalendar;     
+ 
+public class GetWorkDay{     
+     
+  public int getWorkDayNumber(String startDate,String endDate)throws ClassNotFoundException,Exception{
+	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); 
+	Date date_start = sdf.parse(startDate);     
+	Date date_end = sdf.parse(endDate);  
+	Calendar cal_start = Calendar.getInstance();     
+	Calendar cal_end = Calendar.getInstance(); 
+	cal_start.setTime(date_start);     
+	cal_end.setTime(date_end); 
+	int workday = getWorkingDay(cal_start, cal_end);
+	return workday;
+  }
+
+  public int getDaysBetween(java.util.Calendar d1, java.util.Calendar d2) {     
+   if (d1.after(d2)) { 
+    java.util.Calendar swap = d1;     
+    d1 = d2;     
+    d2 = swap;     
+   }     
+   int days = d2.get(java.util.Calendar.DAY_OF_YEAR)     
+     - d1.get(java.util.Calendar.DAY_OF_YEAR);     
+   int y2 = d2.get(java.util.Calendar.YEAR);     
+   if (d1.get(java.util.Calendar.YEAR) != y2) {     
+    d1 = (java.util.Calendar) d1.clone();     
+    do {     
+     days += d1.getActualMaximum(java.util.Calendar.DAY_OF_YEAR);     
+     d1.add(java.util.Calendar.YEAR, 1);     
+    } while (d1.get(java.util.Calendar.YEAR) != y2);     
+   }     
+   return days;     
+  }     
+     
+
+  public int getWorkingDay(java.util.Calendar d1, java.util.Calendar d2) {     
+   int result = -1;     
+   if (d1.after(d2)) {  
+    java.util.Calendar swap = d1;     
+    d1 = d2;     
+    d2 = swap;     
+   }     
+     
+   int betweendays = getDaysBetween(d1, d2);     
+     
+        
+   int charge_date = 0;     
+   int charge_start_date = 0;   
+   int charge_end_date = 0;
+   
+    int stmp;     
+    int etmp;     
+    stmp = 7 - d1.get(Calendar.DAY_OF_WEEK);     
+    etmp = 7 - d2.get(Calendar.DAY_OF_WEEK);     
+    if (stmp != 0 && stmp != 6) {  
+     charge_start_date = stmp ;     
+    }     
+    if (etmp != 0 && etmp != 6) {
+    charge_end_date = etmp ;     
+    }     
+   
+   result = (getDaysBetween(this.getNextMonday(d1), this.getNextMonday(d2)) / 7)     
+     * 5 + charge_start_date - charge_end_date;       
+   return result;     
+  }     
+     
+  public String getWeek(Calendar date) {     
+   final String dayNames[] = { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri",     
+     "Sat" };     
+     
+   int dayOfWeek = date.get(Calendar.DAY_OF_WEEK);         
+   return dayNames[dayOfWeek - 1];     
+     
+  }     
+       
+  public Calendar getNextMonday(Calendar date) {     
+   Calendar result = null;     
+   result = date;     
+   do {     
+    result = (Calendar) result.clone();     
+    result.add(Calendar.DATE, 1);     
+   } while (result.get(Calendar.DAY_OF_WEEK) != 2);     
+   return result;     
+  }      
+       
+
+  public int getHolidays(Calendar d1,Calendar d2){     
+   return this.getDaysBetween(d1, d2)-this.getWorkingDay(d1, d2);     
+        
+  }     
+     
+}   
+**********************************************************************************************
+
+
+

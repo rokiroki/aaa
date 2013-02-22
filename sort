@@ -1,0 +1,22 @@
+
+public class InsertionSort {
+	public static void main(String[] args) {
+		  int num[];
+		  int temp,i,j;
+		  num = new int[]{1,3,2,7,4,6};
+		  
+		  for(j=1;j<num.length;j++) { //插入排序方法
+		   temp = num[j];
+		   i = j;
+		   while(i > 0 && num[i-1] >= temp) {  
+		    num[i] = num[i-1];		    
+		    i--;
+		   }
+		   num[i] = temp;
+		  }
+		  for(i=0;i<6;i++) {  //输出排序结果
+		   System.out.print(num[i] + "  ");
+		  }
+	}
+
+}
