@@ -1,0 +1,12 @@
+#!/usr/bin/perl
+package test;
+#use utf8;
+use strict;
+use REST::Google::Translate;
+
+REST::Google::Translate->http_referer('http://example.com');
+my $res = REST::Google::Translate->new(q => 'hello world',langpair => 'en|it');
+print $res->responseStatus;
+die "failed" if $res->responseStatus != 200;
+my $translated = $res->responseData->translatedText;
+print $translated."\n";
